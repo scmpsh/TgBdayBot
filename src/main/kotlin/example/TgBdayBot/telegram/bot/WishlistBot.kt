@@ -2,20 +2,25 @@ package example.TgBdayBot.telegram.bot
 
 import example.TgBdayBot.telegram.bot.handler.CallbackHandler
 import example.TgBdayBot.telegram.utils.MessageHelper
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 
 @Component
 class WishlistBot(
-    @Value("\${telegram.bot.name}") private val username: String,
-    @Value("\${telegram.bot.token}") private val token: String,
+    @Value("\${telegram.bot.name:}") private val username: String,
+    @Value("\${telegram.bot.token:}") private val token: String,
     commands: Set<BotCommand>,
     callbackHandlers: Set<CallbackHandler>
 ) : TelegramLongPollingCommandBot(token) {
+
+    private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     private lateinit var handlerMapping: Map<String, CallbackHandler>
 
@@ -38,12 +43,19 @@ class WishlistBot(
                 val callbackArguments = callbackData.split("|")
                 val callbackHandlerName = callbackArguments.first()
 
-                handlerMapping.getValue(callbackHandlerName)
-                    .processCallbackData(
-                        this,
-                        callbackQuery,
-                        callbackArguments.subList(1, callbackArguments.size)
-                    )
+                try {
+                    handlerMapping.getValue(callbackHandlerName)
+                        .processCallbackData(
+                            this,
+                            callbackQuery,
+                            callbackArguments.subList(1, callbackArguments.size)
+                        )
+                } catch (e: RuntimeException) {
+                    val chatId = callbackQuery.message.chatId.toString()
+                    val errorMsg = "❌ Oops, something went wrong:\n${e.localizedMessage}"
+                    execute(SendMessage(chatId, errorMsg))
+                    logger.warn(e.message)
+                }
             } else if (update.hasMessage()) {
                 val chatId = update.message.chatId.toString()
                 if (update.message.hasText()) {

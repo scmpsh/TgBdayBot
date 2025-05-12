@@ -4,9 +4,7 @@ import example.TgBdayBot.app.entity.base.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 
-
 @Entity
-data class Wish(
-    @Column(name = "item") var item: String,
-    @Column(name = "number_of_items") var numberOfItems: Int,
+data class Users(
+    @Column(name = "user_id") var userId: Long,
 ) : BaseEntity()

@@ -1,6 +1,6 @@
 package example.TgBdayBot.telegram.bot.handler
 
-import example.TgBdayBot.app.service.WishListService
+import example.TgBdayBot.app.service.WishService
 import example.TgBdayBot.telegram.bot.handler.type.HandlerType
 import example.TgBdayBot.telegram.utils.MessageHelper
 import example.TgBdayBot.telegram.utils.MessageHelper.getInlineKeyboard
@@ -12,7 +12,7 @@ import java.util.*
 
 @Component
 class WishListHandler(
-    private val wishListService: WishListService
+    private val wishService: WishService
 ) : CallbackHandler {
     override val name: HandlerType = HandlerType.WISHLIST
 
@@ -34,7 +34,7 @@ class WishListHandler(
             )
         )
 
-        val wish = wishListService.bookWish(userId, UUID.fromString(arguments[0]))
+        val wish = wishService.bookWish(userId, UUID.fromString(arguments[0]))
         absSender.execute(MessageHelper.createMessage(chatId, String.format("Вы забронировали: %s", wish)))
     }
 }

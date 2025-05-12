@@ -5,10 +5,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
 
 @Configuration
+@Profile("!test")
 class TgBotConfig {
 
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
