@@ -90,7 +90,7 @@ databaseChangeLog:
             tableName: wish
             columns:
               - column: { name: id, valueComputed: "uuid_generate_v4()" }
-              - column: { name: item, value: "Сертификат на тату у @evatattt" }
+              - column: { name: item, value: "Сертификат на тату у @evatattt или @stuuuph" }
               - column: { name: number_of_items, value: "2" }
         - insert:
             tableName: wish
@@ -104,3 +104,21 @@ databaseChangeLog:
               - column: { name: id, valueComputed: "uuid_generate_v4()" }
               - column: { name: item, value: "Сертификат OZON" }
               - column: { name: number_of_items, value: "2" }
+        - insert:
+            tableName: wish
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: item, value: "Lego маленькие наборы" }
+              - column: { name: number_of_items, value: "2" }
+        - insert:
+            tableName: wish
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: item, value: "Lego фортнайт лама есть на озоне" }
+              - column: { name: number_of_items, value: "1" }
+        - insert:
+            tableName: wish
+            columns:
+              - column: { name: id, valueComputed: "uuid_generate_v4()" }
+              - column: { name: item, value: "Книга Нейромант | Гибсон Уильям" }
+              - column: { name: number_of_items, value: "1" }

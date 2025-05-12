@@ -1,0 +1,40 @@
+package tg.bday.bot.telegram.bot.handler
+
+import tg.bday.bot.app.service.WishService
+import tg.bday.bot.telegram.bot.handler.type.HandlerType
+import tg.bday.bot.telegram.utils.MessageHelper
+import tg.bday.bot.telegram.utils.MessageHelper.getInlineKeyboard
+import org.springframework.stereotype.Component
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery
+import org.telegram.telegrambots.meta.bots.AbsSender
+import java.util.*
+
+@Component
+class WishListHandler(
+    private val wishService: WishService
+) : CallbackHandler {
+    override val name: HandlerType = HandlerType.WISHLIST
+
+    override fun processCallbackData(
+        absSender: AbsSender,
+        callbackQuery: CallbackQuery,
+        arguments: List<String>
+    ) {
+
+        val chatId = callbackQuery.message.chatId.toString()
+        val userId = callbackQuery.from.id
+
+        absSender.execute(
+            EditMessageReplyMarkup(
+                chatId,
+                callbackQuery.message.messageId,
+                callbackQuery.inlineMessageId,
+                getInlineKeyboard(emptyList())
+            )
+        )
+
+        val wish = wishService.bookWish(userId, UUID.fromString(arguments[0]))
+        absSender.execute(MessageHelper.createMessage(chatId, String.format("Вы забронировали: %s", wish)))
+    }
+}
